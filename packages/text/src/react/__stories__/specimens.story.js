@@ -31,7 +31,9 @@ Specimen.Label = props => (
   />
 )
 
-const HeadingIpsum = () => 'Fromage edam cottage cheese 123'
+const GinormousIpsum = () => '1,234 Leicester'
+
+const HeadingIpsum = () => 'Fromage edam cottage cheese'
 
 const BodyIpsum = () =>
   'Goat cheese and wine cut the cheese. Fromage cheddar goat cheesecake mascarpone cottage.'
@@ -249,7 +251,7 @@ storiesOf('specimen sheets', module)
           <Specimen key={key}>
             <Specimen.Label>{name}</Specimen.Label>
             <h1 {...styles}>
-              <HeadingIpsum />
+              <GinormousIpsum />
             </h1>
           </Specimen>
         ))}
@@ -263,7 +265,7 @@ storiesOf('specimen sheets', module)
           <Specimen key={key}>
             <Specimen.Label>{name}</Specimen.Label>
             <h1 {...styles}>
-              <HeadingIpsum />
+              <GinormousIpsum />
             </h1>
           </Specimen>
         ))}
