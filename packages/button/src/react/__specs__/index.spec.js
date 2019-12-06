@@ -6,11 +6,30 @@ import { CheckIcon } from '@pluralsight/ps-design-system-icon'
 import Button from '../index.js'
 
 describe('Button', () => {
-  it('forwards refs', () => {
-    const ref = React.createRef()
-    render(<Button ref={ref}>with ref</Button>)
+  describe('ref', () => {
+    it('forwards refs', () => {
+      const ref = React.createRef()
+      render(<Button ref={ref}>with ref</Button>)
 
-    expect(ref.current).not.toBeNull()
+      expect(ref.current).not.toBeNull()
+    })
+
+    it('ref can focus button', () => {
+      const ref = React.createRef()
+
+      const { getByTestId } = render(
+        <Button ref={ref} data-testid="undertest">
+          focusable
+        </Button>
+      )
+
+      const btn = getByTestId('undertest')
+
+      expect(btn).not.toHaveFocus()
+
+      ref.current.focus()
+      expect(btn).toHaveFocus()
+    })
   })
 
   describe('when disabled', () => {
