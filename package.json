@@ -20,7 +20,8 @@
     "clean": "lerna clean",
     "generate": "plop",
     "generate:component": "plop component",
-    "lint": "eslint .",
+    "lint": "tsc --noEmit && eslint . --ext .js,.jsx,.ts,.tsx --quiet",
+    "lint:ci": "tsc --noEmit && eslint . --ext .js,.jsx,.ts,.tsx",
     "octopus:deploy": "octopus-deploy-create-release-and-deploy",
     "octopus:publish": "gulp octopus-publish",
     "publish": "lerna publish --conventional-commits --message \"build: publish\"",
@@ -36,13 +37,8 @@
     }
   },
   "lint-staged": {
-    "**/*.css": [
-      "prettier-eslint --write",
-      "git add"
-    ],
-    "**/*.js": [
-      "prettier-eslint --write",
-      "eslint",
+    "*.{js,ts,tsx}": [
+      "eslint --fix",
       "git add"
     ],
     "package.json": [
@@ -70,6 +66,7 @@
     "@babel/plugin-syntax-import-meta": "^7.2.0",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
+    "@babel/preset-typescript": "^7.8.3",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-angular": "^8.2.0",
     "@commitlint/config-lerna-scopes": "^8.2.0",
@@ -83,6 +80,10 @@
     "@testing-library/jest-dom": "^4.2.3",
     "@testing-library/react": "^9.3.2",
     "@testing-library/react-hooks": "^3.1.1",
+    "@types/jest": "^24.9.1",
+    "@types/react": "^16.9.19",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-macros": "^2.6.1",
     "core-js": "^2.6.10",
@@ -96,6 +97,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^23.0.2",
     "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.2.0",
@@ -116,10 +118,11 @@
     "octopus-deploy": "^6.0.0",
     "plop": "^2.5.3",
     "prettier": "^1.18.2",
-    "prettier-eslint-cli": "^5.0.0",
     "raf": "^3.4.1",
     "react-test-renderer": "^16.11.0",
     "require-context.macro": "^1.2.2",
+    "ts-jest": "^25.0.0",
+    "typescript": "^3.7.5",
     "webpack": "^4.41.2",
     "yargs": "^14.2.0"
   }
