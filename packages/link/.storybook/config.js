@@ -8,7 +8,7 @@ import featureFlagsDecorator from '@pluralsight/ps-design-system-storybook-addon
 addDecorator(themeDecorator)
 addDecorator(featureFlagsDecorator)
 
-const req = requireContext('../src', true, /\.story\.js$/)
+const req = requireContext('../src', true, /\.story\.tsx/)
 
 function loadStories() {
   req.keys().forEach(filename => req(filename))
