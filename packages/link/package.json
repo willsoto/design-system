@@ -9,16 +9,18 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "scripts": {
-    "build": "run-s build:js build:cjs build:css",
+    "build": "run-s build:types build:js build:cjs build:css",
     "build:cjs": "babel --root-mode upward src --out-dir dist/cjs --extensions \".ts,.tsx\"",
     "build:css": "build-css --useGlamor -i dist/cjs/css/index.js",
     "build:js": "cross-env ESM=true babel --root-mode upward src --out-dir dist/esm --extensions \".ts,.tsx\"",
+    "build:types": "tsc --project tsconfig.types.json",
     "build:watch": "npm run build:js -- --watch",
     "prepublish": "npm run build",
     "storybook": "start-storybook -p 6006",
     "test": "jest",
     "test:watch": "npm run test -- --watchAll"
   },
+  "types": "lib/index.d.ts",
   "typings": "./react.d.ts",
   "dependencies": {
     "@pluralsight/ps-design-system-core": "^5.4.6"

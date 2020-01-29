@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.json",
+
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+
+  "exclude": [
+    ".jest",
+    "node_modules",
+    "dist",
+    "**/__mocks__",
+    "**/*.spec.*",
+    "**/*.stories.*"
+  ],
+
+  "include": ["../../declarations", "src"]
+}

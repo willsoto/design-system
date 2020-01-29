@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "declaration": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
@@ -10,5 +9,7 @@
     "strict": true,
     "target": "esnext"
   },
+
+  "exclude": ["node_modules", "dist"],
   "include": ["declarations", "packages/link/src"]
 }
