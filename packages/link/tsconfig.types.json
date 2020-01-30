@@ -1,12 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.json",
 
   "compilerOptions": {
     "declaration": true,
     "emitDeclarationOnly": true,
-    "noEmit": false,
-    "outDir": "lib",
-    "rootDir": "src"
+    "noEmit": false
   },
 
   "exclude": [
@@ -16,7 +14,5 @@
     "**/__mocks__",
     "**/*.spec.*",
     "**/*.stories.*"
-  ],
-
-  "include": ["../../declarations", "src"]
+  ]
 }

@@ -20,8 +20,7 @@
     "test": "jest",
     "test:watch": "npm run test -- --watchAll"
   },
-  "types": "lib/index.d.ts",
-  "typings": "./react.d.ts",
+  "typings": "lib/index.d.ts",
   "dependencies": {
     "@pluralsight/ps-design-system-core": "^5.4.6"
   },

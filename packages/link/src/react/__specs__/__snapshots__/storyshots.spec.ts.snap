@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots appearance default 1`] = `
+<p
+  style={
+    Object {
+      "color": "white",
+    }
+  }
+>
+  <a
+    data-css-1skajya=""
+    href="http://duckduckgo.com"
+  >
+    Click me
+  </a>
+</p>
+`;
+
+exports[`Storyshots appearance subtle 1`] = `
+<p
+  style={
+    Object {
+      "color": "white",
+    }
+  }
+>
+  <a
+    data-css-1vzf57m=""
+    href="http://duckduckgo.com"
+  >
+    Click me
+  </a>
+</p>
+`;
+
+exports[`Storyshots tagNames button 1`] = `
+<p
+  style={
+    Object {
+      "color": "white",
+    }
+  }
+>
+  <button
+    data-css-1skajya=""
+  >
+    Click me
+  </button>
+</p>
+`;
