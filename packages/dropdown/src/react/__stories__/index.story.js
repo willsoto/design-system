@@ -256,6 +256,20 @@ storiesOf('placeholder', module).add('as pre-selected item', _ => (
   />
 ))
 
+storiesOf('portal', module).add('as pre-selected item', _ => (
+  <DropdownWithDefaults
+    placeholder="Two item"
+    inPortal
+    menu={
+      <ActionMenu>
+        <ActionMenu.Item>One item</ActionMenu.Item>
+        <ActionMenu.Item>Two item</ActionMenu.Item>
+        <ActionMenu.Item>Three item</ActionMenu.Item>
+      </ActionMenu>
+    }
+  />
+))
+
 storiesOf('menu', module)
   .add('single list', _ => (
     <DropdownWithDefaults

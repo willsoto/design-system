@@ -98,7 +98,7 @@ const CaretDown = _ => (
   </svg>
 )
 
-const Dropdown = React.forwardRef((props, forwardedRef) => {
+const Dropdown = React.forwardRef(({ inPortal, ...props }, forwardedRef) => {
   const themeName = useTheme()
   const allProps = { ...props, themeName }
   const [isKeyboarding, setKeyboarding] = React.useState(false)
@@ -235,90 +235,90 @@ const Dropdown = React.forwardRef((props, forwardedRef) => {
   const [width, setWidth] = React.useState('auto')
   const innerRef = React.createRef(null)
   const combinedRef = useCombinedRefs(forwardedRef, innerRef)
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     setWidth(combinedRef.current.getBoundingClientRect().width)
   }, [combinedRef, forwardedRef])
   const inNode = canUseDOM ? document.body : null
   const [menuPosition, setMenuPosition] = React.useState({})
   const fieldContainerRef = useRef()
-  React.useLayoutEffect(() => {
-    const { left, bottom } = fieldContainerRef.current.getBoundingClientRect()
-    setMenuPosition({ left, top: bottom })
-  }, [fieldContainerRef])
+  React.useEffect(() => {
+    if (inPortal) {
+      const { left, bottom } = fieldContainerRef.current.getBoundingClientRect()
+      requestAnimationFrame(() => setMenuPosition({ left, top: bottom }))
+    }
+  }, [fieldContainerRef, inPortal, isOpen])
+  const Menu = React.cloneElement(allProps.menu, {
+    isKeyboarding: isKeyboarding,
+    onChange: handleMenuChange,
+    onClick: handleMenuClick,
+    ref: menu,
+    onClose: _ => {
+      setOpen(false)
+      if (typeof allProps.menu.props.onClose === 'function')
+        allProps.menu.props.onClose()
+    },
+    style: {
+      ...allProps.menu.props.style,
+      minWidth: '0',
+      maxWidth: 'none',
+      width,
+      ...menuPosition
+    }
+  })
   return (
-    <>
-      <label
-        {...styles.dropdown(allProps)}
-        {...(style ? { style: style } : null)}
-        {...(className ? { className: className } : null)}
-        onKeyDown={handleKeyDown}
-      >
-        {allProps.label && (
-          <div {...styles.label(allProps)}>{allProps.label}</div>
+    <label
+      {...styles.dropdown(allProps)}
+      {...(style ? { style: style } : null)}
+      {...(className ? { className: className } : null)}
+      onKeyDown={handleKeyDown}
+    >
+      {allProps.label && (
+        <div {...styles.label(allProps)}>{allProps.label}</div>
+      )}
+      <div {...styles.fieldContainer(allProps)} ref={fieldContainerRef}>
+        <Halo
+          error={allProps.error}
+          gapSize={Halo.gapSizes.small}
+          {...styles.halo()}
+        >
+          <div {...styles.fieldAligner(allProps)}>
+            <button
+              {...filterReactProps(buttonProps, { tagName: 'button' })}
+              {...styles.field(allProps)}
+              disabled={allProps.disabled}
+              onClick={allProps.disabled ? null : handleToggleOpen}
+              ref={combinedRef}
+            >
+              <span aria-hidden {...styles.buttonSizer(allProps)}>
+                {longestMenuItemState.label || allProps.placeholder}
+              </span>
+              <span {...styles.placeholder({ ...allProps, selectedLabel })}>
+                {selectedLabel || allProps.placeholder}
+              </span>
+            </button>
+            <div {...styles.icon(allProps)}>
+              <Icon>
+                <CaretDown />
+              </Icon>
+            </div>
+          </div>
+        </Halo>
+        {allProps.error && (
+          <div {...styles.error(allProps)}>
+            <WarningIcon />
+          </div>
         )}
-        <div {...styles.fieldContainer(allProps)} ref={fieldContainerRef}>
-          <Halo
-            error={allProps.error}
-            gapSize={Halo.gapSizes.small}
-            {...styles.halo()}
-          >
-            <div {...styles.fieldAligner(allProps)}>
-              <button
-                {...filterReactProps(buttonProps, { tagName: 'button' })}
-                {...styles.field(allProps)}
-                disabled={allProps.disabled}
-                onClick={allProps.disabled ? null : handleToggleOpen}
-                ref={combinedRef}
-              >
-                <span aria-hidden {...styles.buttonSizer(allProps)}>
-                  {longestMenuItemState.label || allProps.placeholder}
-                </span>
-                <span {...styles.placeholder({ ...allProps, selectedLabel })}>
-                  {selectedLabel || allProps.placeholder}
-                </span>
-              </button>
-              <div {...styles.icon(allProps)}>
-                <Icon>
-                  <CaretDown />
-                </Icon>
-              </div>
-            </div>
-          </Halo>
-          {allProps.error && (
-            <div {...styles.error(allProps)}>
-              <WarningIcon />
-            </div>
-          )}
+      </div>
+      {isOpen && (
+        <div {...styles.menu(allProps)}>
+          {inPortal ? createUniversalPortal(Menu, inNode) : Menu}
         </div>
-        {allProps.menu &&
-          isOpen &&
-          createUniversalPortal(
-            <div {...styles.menu(allProps)} style={menuPosition}>
-              {React.cloneElement(allProps.menu, {
-                isKeyboarding: isKeyboarding,
-                onChange: handleMenuChange,
-                onClick: handleMenuClick,
-                ref: menu,
-                onClose: _ => {
-                  setOpen(false)
-                  if (typeof allProps.menu.props.onClose === 'function')
-                    allProps.menu.props.onClose()
-                },
-                style: {
-                  ...allProps.menu.props.style,
-                  minWidth: '0',
-                  maxWidth: 'none',
-                  width
-                }
-              })}
-            </div>,
-            inNode
-          )}
-        {allProps.subLabel && (
-          <div {...styles.subLabel(allProps)}>{allProps.subLabel}</div>
-        )}
-      </label>
-    </>
+      )}
+
+      {allProps.subLabel && (
+        <div {...styles.subLabel(allProps)}>{allProps.subLabel}</div>
+      )}
+    </label>
   )
 })
 
@@ -339,14 +339,16 @@ Dropdown.propTypes = {
   size: PropTypes.oneOf(Object.values(vars.sizes)),
   subLabel: PropTypes.node,
   style: PropTypes.object,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  inPortal: PropTypes.bool
 }
 Dropdown.defaultProps = {
   appearance: vars.appearances.default,
   disabled: false,
   error: false,
   size: vars.sizes.medium,
-  menu: <span />
+  menu: <span />,
+  inPortal: false
 }
 
 Dropdown.appearances = vars.appearances
